@@ -13,6 +13,23 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// Temporary route to fix PostgreSQL sequences after manual seeding
+Route::get('/fix-database', function () {
+    try {
+        $tables = ['users', 'categories', 'sub_services', 'bookings', 'provider_sub_service'];
+        foreach ($tables as $table) {
+            $maxId = \DB::table($table)->max('id');
+            if ($maxId) {
+                // This resets the Postgres "Auto Increment" counter to the highest current ID
+                \DB::statement("SELECT setval('{$table}_id_seq', $maxId)");
+            }
+        }
+        return "Database sequences fixed successfully!";
+    } catch (\Exception $e) {
+        return "Error: " . $e->getMessage();
+    }
+});
+
 Route::get('/dashboard', function () {
     $user = Auth::user();
     if ($user->isAdmin()) {
