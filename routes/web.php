@@ -13,16 +13,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// Temporary route to seed data on Render Free Tier
-Route::get('/seed-data', function () {
-    try {
-        \Illuminate\Support\Facades\Artisan::call('db:seed', ['--force' => true]);
-        return "Database seeding completed successfully!";
-    } catch (\Exception $e) {
-        return "Error: " . $e->getMessage();
-    }
-});
-
 Route::get('/dashboard', function () {
     $user = Auth::user();
     if ($user->isAdmin()) {
