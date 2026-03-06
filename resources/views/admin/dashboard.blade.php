@@ -131,6 +131,79 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Recent Operations Stream -->
+            <div class="space-y-8 animate-fade-in delay-200">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center text-2xl shadow-inner group-hover:rotate-12 transition-transform">⚡</div>
+                        <h3 class="text-2xl font-black text-slate-900 tracking-tight leading-none italic uppercase tracking-tighter">Operational Real-Time Stream</h3>
+                    </div>
+                    <a href="{{ route('admin.bookings') }}" class="text-indigo-600 text-[10px] font-black uppercase tracking-widest hover:gap-3 transition-all flex items-center gap-2 italic">Full Audit Ledger ⇀</a>
+                </div>
+
+                <div class="glass-card overflow-hidden border-none shadow-2xl bg-white/80 backdrop-blur-md">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead>
+                                <tr class="bg-indigo-600 text-white uppercase text-[8px] font-black tracking-[0.3em]">
+                                    <th class="px-10 py-6">Signal ID</th>
+                                    <th class="px-10 py-6">Operation</th>
+                                    <th class="px-10 py-6">Participants</th>
+                                    <th class="px-10 py-6 text-right">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100">
+                                @forelse($recentBookings as $booking)
+                                    <tr class="group hover:bg-slate-50/50 transition-colors">
+                                        <td class="px-10 py-8">
+                                            <span class="font-black text-slate-300 text-[10px] tracking-widest italic group-hover:text-indigo-400 transition-colors">#DE-{{ str_pad($booking->id, 4, '0', STR_PAD_LEFT) }}</span>
+                                        </td>
+                                        <td class="px-10 py-8">
+                                            <p class="font-black text-slate-900 text-base leading-none mb-1">{{ $booking->subService->name }}</p>
+                                            <p class="text-[9px] text-indigo-500 font-bold uppercase tracking-wider italic">{{ $booking->subService->category->name }}</p>
+                                        </td>
+                                        <td class="px-10 py-8">
+                                            <div class="flex flex-col gap-1.5">
+                                                <p class="text-xs font-black text-slate-800 flex items-center gap-2">
+                                                    <span class="w-1.5 h-1.5 bg-slate-300 rounded-full"></span>
+                                                    {{ $booking->customer->name }}
+                                                </p>
+                                                @if($booking->provider)
+                                                    <p class="text-[10px] font-bold text-slate-500 flex items-center gap-2 italic">
+                                                        <span class="w-1.5 h-1.5 bg-indigo-400 rounded-full"></span>
+                                                        {{ $booking->provider->name }}
+                                                    </p>
+                                                @else
+                                                    <span class="text-[9px] font-black uppercase text-amber-500 animate-pulse italic">Awaiting Asset...</span>
+                                                @endif
+                                            </div>
+                                        </td>
+                                        <td class="px-10 py-8 text-right">
+                                            <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-widest
+                                                @if($booking->status == 'pending') bg-amber-50 text-amber-600
+                                                @elseif($booking->status == 'accepted') bg-indigo-50 text-indigo-600
+                                                @elseif($booking->status == 'completed') bg-emerald-50 text-emerald-600
+                                                @else bg-slate-50 text-slate-600 @endif">
+                                                <span class="w-1.5 h-1.5 rounded-full
+                                                    @if($booking->status == 'pending') bg-amber-400 animate-pulse
+                                                    @elseif($booking->status == 'accepted') bg-indigo-400
+                                                    @elseif($booking->status == 'completed') bg-emerald-400
+                                                    @else bg-slate-400 @endif"></span>
+                                                {{ $booking->status }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="4" class="px-10 py-20 text-center font-bold text-slate-400 italic">No operational data detected in recent stream. Hub stands ready.</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
             
             <div class="flex flex-col md:flex-row gap-8 animate-fade-in delay-200">
                 <div class="flex-1 glass-card p-12 border-none bg-slate-900 text-white flex items-center justify-between overflow-hidden relative group">

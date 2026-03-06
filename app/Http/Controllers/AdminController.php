@@ -17,8 +17,11 @@ class AdminController extends Controller
         $totalBookings = Booking::count();
         $totalCategories = Category::count();
         $totalSubServices = SubService::count();
+        
+        // Fetch 5 most recent bookings for the dashboard stream
+        $recentBookings = Booking::with('customer', 'provider', 'subService.category')->latest()->take(5)->get();
 
-        return view('admin.dashboard', compact('pendingProviders', 'totalBookings', 'totalCategories', 'totalSubServices'));
+        return view('admin.dashboard', compact('pendingProviders', 'totalBookings', 'totalCategories', 'totalSubServices', 'recentBookings'));
     }
 
     public function manageProviders()
