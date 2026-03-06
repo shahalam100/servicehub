@@ -16,13 +16,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        // User::factory()->create([ // Commented out this block as per instruction
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
-
-        $this->call(ServiceSeeder::class); // Added this line as per instruction
+        $this->call(DataMigrationSeeder::class);
     }
 }
